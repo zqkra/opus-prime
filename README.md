@@ -6,7 +6,7 @@
 
 One file, [`output-styles/sr-opus.md`](output-styles/sr-opus.md), that turns Opus 5.5 inside Claude Code into a precise senior engineer: answer first, no verbal tics, reference codes, strict scope, no early stops on long runs.
 
-It applies everywhere the `claude` CLI runs: terminal, IDE, desktop, Agent SDK, and agent hosts like Zeron.
+It applies everywhere the `claude` CLI runs: terminal, IDE, desktop, Agent SDK.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
