@@ -52,14 +52,6 @@ The original runs through `claude --append-system-prompt-file` from a `justfile`
 
 To try it in a single session without installing anything, `claude --append-system-prompt-file output-styles/sr-opus.md` works with this same file, though the model also receives the frontmatter lines as text. Do not combine it with the installed style or the model gets the rules twice.
 
-## Zeron
-
-Zeron has no system prompt of its own for Claude. It spawns the real binary as `claude --print --input-format stream-json --output-format stream-json ...` (see `crates/harness/src/claude/mod.rs` in `zeronsh/zeron`) with no `--setting-sources`, `--system-prompt`, or `--append-system-prompt`. That means it loads `~/.claude/settings.json` and `~/.claude/output-styles/` like any terminal session, so running `./install.sh` on the machine where the Zeron daemon runs covers every Claude session it launches. On a VPS or several synced machines, install it on each machine that runs agents.
-
-1. Run `./install.sh` on every machine where Zeron executes Claude Code.
-2. Restart open sessions. Claude Code reads styles at startup, and switching styles mid-session invalidates the prompt cache.
-3. Verify inside Zeron by sending `/output-style`. The list must show `- sr-opus (current)`. The first line (`Output style: ...`) echoes the configured value even when no style matches it, so it is not proof. From a terminal, `./install.sh --check` in the project directory runs the same check.
-
 ## Verified traps
 
 - The name is case-sensitive. `"outputStyle": "Sr-Opus"` silently falls back to Default. `./install.sh --check` catches it.
