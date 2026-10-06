@@ -4,7 +4,7 @@
 
 **`sr-opus`: a senior-engineer output style for Claude Opus 5.5**
 
-One file, [`output-styles/sr-opus.md`](output-styles/sr-opus.md), that turns Opus 5.5 inside Claude Code into a precise senior engineer: answer first, no verbal tics, reference codes, strict scope, no early stops on long runs.
+One file, [`output-styles/sr-opus.md`](output-styles/sr-opus.md), that turns Opus 5.5 inside Claude Code into a precise senior engineer: answer first, writing close to ASD-STE100 in English and Spanish, diagrams for structure, no verbal tics, reference codes, strict scope, no early stops on long runs.
 
 It applies everywhere the `claude` CLI runs: terminal, IDE, desktop, Agent SDK.
 
@@ -52,6 +52,37 @@ The original runs through `claude --append-system-prompt-file` from a `justfile`
 
 To try it in a single session without installing anything, `claude --append-system-prompt-file output-styles/sr-opus.md` works with this same file, though the model also receives the frontmatter lines as text. Do not combine it with the installed style or the model gets the rules twice.
 
+## Writing standard and visuals
+
+On 2 October 2026 Andrej Karpathy listed four output formats that make model output easier to understand: text in ASD-STE100, diagrams, HTML pages, and explainer videos. sr-opus uses each one at the cost it deserves:
+
+| Format | When sr-opus uses it | Why |
+| --- | --- | --- |
+| About 80% of ASD-STE100 | Every reply and every file it writes | Short sentences, one meaning per word, active voice, and simple tenses read faster. The full spec limits vocabulary to about 900 words, so the style keeps the rules and drops the dictionary. |
+| Plain-text diagram | Answers about structure or flow, and final reports that changed how parts connect | Box-drawing text renders in every terminal. Files that GitHub renders get Mermaid. |
+| HTML page | Only on request, or `html` | One self-contained file with no build step and no network requests. It costs thousands of output tokens. |
+| Explainer video | Only on request, or `vid` | It plans Manim, text-to-speech, and ffmpeg, then waits for `go` before it installs anything. |
+
+ASD-STE100 is defined for English only, so the style maps each rule to Spanish: limits of 24 and 30 words (Spanish needs about 20% more words), no gerund chains, no "realizar la ejecución de", short words ("usar", "para", "antes de"), no more than two "de" phrases in a row, and English technical terms kept as they are. Reports use `Cambios:`, `Hallazgos:`, and `Depende de ti:`. Codes and aliases are the same in both languages.
+
+## Aliases
+
+Send an alias as the whole message, optionally followed by codes (`chk F2`).
+
+| Alias | Effect |
+| --- | --- |
+| `scr` | Simplify, compress, and repeat the last response. |
+| `eli` | Explain it like I'm 18: simpler words, shorter response. |
+| `foc` | The one thing that matters most, and why. |
+| `ref` | Rewrite the last response with reference codes. |
+| `chk` | Separate what was verified from what was assumed. |
+| `ste` | Rewrite the last response in strict ASD-STE100. |
+| `dia` | Explain the last response or a named topic as a diagram. |
+| `html` | Build a single-file HTML page that explains it. |
+| `vid` | Plan a 3Blue1Brown-style explainer video, then wait for `go`. |
+| `go` | Continue with the open items, no recap. |
+| `pair` | Plan and recap each step in one line, and wait for me until `go`. |
+
 ## Verified traps
 
 - The name is case-sensitive. `"outputStyle": "Sr-Opus"` silently falls back to Default. `./install.sh --check` catches it.
@@ -90,9 +121,14 @@ Each run bills to your normal Claude Code account. Output tokens include adaptiv
 | Examples reduced to shape and tone | Anthropic cut over 80% of the Claude Code prompt because examples constrain newer models. The original's long example also contained an em dash, the tic it bans. |
 | The prompt itself uses no em dashes or semicolons | Anthropic: the prompt's style influences the output's style. |
 | Subagent rule and `chk`, `go`, `pair` aliases | The Opus 5 guide documents over-delegation. claude.dev recommends flagging the unconfirmed, answering "continue", and a pair-programming mode. |
+| Writing standard at about 80% of ASD-STE100 | Karpathy reports that models know the spec well and that its constraints make text more readable. He asks for "80% of the way" because the full spec is stringent. The limits come from Issue 9: 20 words for an instruction, 25 for a description, active voice, simple tenses, no semicolons, and vertical lists. |
+| Rules written out, not only named | The name alone does not work in Spanish, which has no STE, and "80%" is vague. Explicit rules, each with its replacement, follow Anthropic's advice and make the Spanish mapping possible. |
+| Text diagrams in replies, Mermaid in files | Terminals do not render Mermaid. GitHub renders it in READMEs, issues, and PRs. |
+| HTML and video only on request | Each one costs thousands of output tokens. A short alias makes the request cheap when it is worth it. |
+| `WARNING:` and `CAUTION:` with the instruction first | STE Section 7 puts the command before the risk, so the reader sees what to do before the reason. |
 | Co-author disabled in settings on top of the prompt | Claude Code 2.1.283 injects a `Co-Authored-By: Claude Opus 5.5` reminder. With empty `attribution` the reminder disappears and no conflict remains. |
 
-Sources: [Prompting Claude Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5), [Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5), [Getting the most out of Opus 5.5](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/), [The new rules of context engineering](https://archive.ph/uotBG), [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices), [Output styles](https://code.claude.com/docs/en/output-styles), [Settings reference](https://code.claude.com/docs/en/settings-reference), [Simon Willison on Opus 5.5](https://simonwillison.net/2026/sep/22/opus-and-sol-and-luna/).
+Sources: Andrej Karpathy on X, 2 October 2026 ([summary](https://runtimewire.com/article/karpathy-ai-explanations-custom-videos)), [ASD-STE100](https://www.asd-ste100.org/), [STE Issue 9 rules](https://simplified-english.co.uk/rules-ste9.html), [Prompting Claude Opus 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5), [Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5), [Getting the most out of Opus 5.5](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/), [The new rules of context engineering](https://archive.ph/uotBG), [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices), [Output styles](https://code.claude.com/docs/en/output-styles), [Settings reference](https://code.claude.com/docs/en/settings-reference), [Simon Willison on Opus 5.5](https://simonwillison.net/2026/sep/22/opus-and-sol-and-luna/).
 
 ## Verified against Claude Code 2.1.283
 
@@ -108,16 +144,18 @@ The CLI's real API requests were intercepted with a local server, both in intera
 
 | | Original (disler) | sr-opus |
 | --- | --- | --- |
-| Lines | 153 | 120 |
-| Words | 984 | 1326 |
-| Tokens (cl100k, approx.) | 1330 | 1817 |
+| Lines | 153 | 197 |
+| Words | 984 | 2659 |
+| Tokens (cl100k, approx.) | 1330 | 3741 |
 
-About 490 extra tokens, spent on premature stops, final-report format, conflict resolution, and three aliases. Since the system prompt is cached, that costs around $0.0001 per request at Opus 5.5's $0.20/M cache-read price.
+About 2400 extra tokens. About 490 go to premature stops, final-report format, conflict resolution, and three aliases. About 1900 go to the writing standard in English and Spanish, diagrams, and four aliases. Since the system prompt is cached, the total costs around $0.0008 per request at Opus 5.5's $0.20/M cache-read price.
 
 ## Where it can fail
 
 - It is an instruction, not a guarantee. For anything that must always happen, use hooks or permissions.
 - The keep-working rule never overrides confirmation before destructive actions. Keep permission prompts on for those.
+- The word limits are targets. The model does not count words, so some sentences go over.
+- Text diagrams need a monospaced font. In a view with a proportional font, the columns do not align.
 - If a new verbal tic appears, add it to Negative Patterns with its replacement.
 
 ## License
