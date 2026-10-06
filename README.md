@@ -24,7 +24,7 @@ The script copies the style to `~/.claude/output-styles/sr-opus.md`, sets `"outp
 
 | Command | What it does |
 | --- | --- |
-| `./install.sh` | Install or update, then verify. Run it again after every `git pull`. |
+| `./install.sh` | Install or update, then verify. Run it again after every `git pull`, then restart open sessions: Claude Code reads style files when it starts. |
 | `./install.sh --check` | Report which style is actually active in the current directory, and warn if a project settings file overrides it. |
 | `./install.sh --uninstall` | Remove the style and the `outputStyle` key. Leaves `attribution` in place and tells you. |
 
@@ -36,6 +36,32 @@ cp output-styles/sr-opus.md ~/.claude/output-styles/
 # merge settings.example.json into ~/.claude/settings.json
 claude -p "/output-style"   # should list: - sr-opus (current)
 ```
+
+## Example
+
+The same question went to the same model in the same repository, once with v1 and once with v2. Only the style changed.
+
+> ¿Cómo llega el estilo desde este repositorio hasta el modelo cuando abro una sesión nueva de Claude Code?
+
+v1 explained the flow only in prose, then gave two numbered points. v2 gave the answer in one paragraph, then drew this diagram, then gave three numbered points with instructions in the imperative:
+
+```text
+repo: output-styles/sr-opus.md
+        │  ./install.sh (copia el archivo)
+        ▼
+~/.claude/output-styles/sr-opus.md     ~/.claude/settings.json
+        │                              "outputStyle": "sr-opus"
+        └───────────────┬──────────────┘
+                        ▼
+      claude arranca y resuelve el nombre "sr-opus"
+                        │
+                        ├──► system prompt: cuerpo del .md
+                        │    (sin el frontmatter)
+                        └──► cada turno: recordatorio
+                             "sr-opus output style is active"
+```
+
+The full outputs, a second example in English, and the commands to reproduce them are in [`examples/v1-vs-v2.md`](examples/v1-vs-v2.md).
 
 ## Why an output style
 
