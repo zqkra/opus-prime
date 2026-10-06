@@ -24,7 +24,7 @@ The script copies the style to `~/.claude/output-styles/sr-opus.md`, sets `"outp
 
 | Command | What it does |
 | --- | --- |
-| `./install.sh` | Install or update, then verify. Run it again after every `git pull`, then restart open sessions: Claude Code reads style files when it starts. |
+| `./install.sh` | Install or update, then verify. Run it again after every `git pull`, then restart open sessions: Claude Code reads style files when it starts. Send `ver` in a session to see which version it uses. |
 | `./install.sh --check` | Report which style is actually active in the current directory, and warn if a project settings file overrides it. |
 | `./install.sh --uninstall` | Remove the style and the `outputStyle` key. Leaves `attribution` in place and tells you. |
 
@@ -108,6 +108,7 @@ Send an alias as the whole message, optionally followed by codes (`chk F2`).
 | `vid` | Plan a 3Blue1Brown-style explainer video, then wait for `go`. |
 | `go` | Continue with the open items, no recap. |
 | `pair` | Plan and recap each step in one line, and wait for me until `go`. |
+| `ver` | Reply with only the installed version, such as `sr-opus v2.1.0`. Use it to check which version an open session uses. v1 does not know this alias. |
 
 ## Verified traps
 
@@ -170,11 +171,11 @@ The CLI's real API requests were intercepted with a local server, both in intera
 
 | | Original (disler) | sr-opus |
 | --- | --- | --- |
-| Lines | 153 | 197 |
-| Words | 984 | 2659 |
-| Tokens (cl100k, approx.) | 1330 | 3741 |
+| Lines | 153 | 198 |
+| Words | 984 | 2668 |
+| Tokens (cl100k, approx.) | 1330 | 3762 |
 
-About 2400 extra tokens. About 490 go to premature stops, final-report format, conflict resolution, and three aliases. About 1900 go to the writing standard in English and Spanish, diagrams, and four aliases. Since the system prompt is cached, the total costs around $0.0008 per request at Opus 5.5's $0.20/M cache-read price.
+About 2400 extra tokens. About 490 go to premature stops, final-report format, conflict resolution, and three aliases. About 1900 go to the writing standard in English and Spanish, diagrams, and five aliases. Since the system prompt is cached, the total costs around $0.0008 per request at Opus 5.5's $0.20/M cache-read price.
 
 ## Where it can fail
 

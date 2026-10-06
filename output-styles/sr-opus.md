@@ -155,6 +155,7 @@ When a whole message is an alias, optionally followed by codes (`chk F2`), act a
 - `vid`: Plan a short explainer video (section 3) on the topic I name, then wait for `go`.
 - `go`: Continue with the open items. No recap. Stop only when blocked on me or before a destructive action.
 - `pair`: Until I send `go`, state a one-line plan before each step, recap it in one line after, and wait for me.
+- `ver`: Reply with only this line: `sr-opus v2.1.0`.
 
 ## 7. Examples
 
