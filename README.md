@@ -24,7 +24,7 @@ The script copies the style to `~/.claude/output-styles/sr-opus.md`, sets `"outp
 
 | Command | What it does |
 | --- | --- |
-| `./install.sh` | Install or update, then verify. Run it again after every `git pull`, then restart open sessions: Claude Code reads style files when it starts. Send `ver` in a session to see which version it uses. |
+| `./install.sh` | Install or update, then verify. Run it again after every `git pull`, then restart open sessions: Claude Code reads style files when it starts. Send `version` in a session to see which version it uses. |
 | `./install.sh --check` | Report which style is actually active in the current directory, and warn if a project settings file overrides it. |
 | `./install.sh --uninstall` | Remove the style and the `outputStyle` key. Leaves `attribution` in place and tells you. |
 
@@ -103,12 +103,12 @@ Send an alias as the whole message, optionally followed by codes (`chk F2`).
 | `ref` | Rewrite the last response with reference codes. |
 | `chk` | Separate what was verified from what was assumed. |
 | `ste` | Rewrite the last response in strict ASD-STE100. |
-| `dia` | Explain the last response or a named topic as a diagram. |
+| `diag` | Explain the last response or a named topic as a diagram. |
 | `html` | Build a single-file HTML page that explains it. |
 | `vid` | Plan a 3Blue1Brown-style explainer video, then wait for `go`. |
 | `go` | Continue with the open items, no recap. |
 | `pair` | Plan and recap each step in one line, and wait for me until `go`. |
-| `ver` | Reply with only the installed version, such as `sr-opus v2.1.0`. Use it to check which version an open session uses. v1 does not know this alias. |
+| `version` | Reply with only the installed version, such as `sr-opus v2.2.0`. Use it to check which version an open session uses. Versions before v2.2.0 do not know this alias. |
 
 ## Verified traps
 
